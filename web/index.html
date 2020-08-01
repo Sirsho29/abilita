@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
@@ -10,14 +11,41 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="abilita">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <meta name="google-signin-client_id" content="17797987641-0f3phnkbuffvdcnhg1j0cdq9rqrdtkgo.apps.googleusercontent.com">
 
   <!-- Favicon -->
-  <link rel="shortcut icon" type="image/png" href="favicon.png"/>
+  <link rel="shortcut icon" type="image/png" href="favicon.png" />
 
   <title>abilita</title>
   <link rel="manifest" href="manifest.json">
 </head>
+
 <body>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js"></script>
+
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyALjXOrifLoPYX2q56-0vYbC0mA0yGiE0k",
+      authDomain: "usp-abilita.firebaseapp.com",
+      databaseURL: "https://usp-abilita.firebaseio.com",
+      projectId: "usp-abilita",
+      storageBucket: "usp-abilita.appspot.com",
+      messagingSenderId: "17797987641",
+      appId: "1:17797987641:web:620c6b1837634102d07ce8",
+      measurementId: "G-K8F2P29PGS"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+  </script>
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
@@ -30,13 +58,5 @@
   </script>
   <script src="main.dart.js" type="application/javascript"></script>
 </body>
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="/__/firebase/7.17.1/firebase-app.js"></script>
 
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-<script src="/__/firebase/7.17.1/firebase-analytics.js"></script>
-
-<!-- Initialize Firebase -->
-<script src="/__/firebase/init.js"></script>
 </html>

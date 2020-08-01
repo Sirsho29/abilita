@@ -1,3 +1,5 @@
+import 'package:abilita/screens/auth/auth_service.dart';
+import 'package:abilita/screens/auth/login.dart';
 import 'package:flutter/material.dart';
 import './providers/cart.dart';
 import './providers/orders.dart';
@@ -7,7 +9,12 @@ import './screens/product_detail_screen.dart';
 import 'package:provider/provider.dart';
 import './screens/products_overview_screen.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MultiProvider(providers: [
+      Provider(create: (_) => FirebaseAuthService()),
+      StreamProvider(
+          create: (context) =>
+              context.read<FirebaseAuthService>().onAuthStateChanged),
+    ], child: MyApp()));
 
 class MyApp extends StatelessWidget {
   @override
@@ -36,6 +43,8 @@ class MyApp extends StatelessWidget {
         routes: {
           ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
           MyCart.routeName: (ctx) => MyCart(),
+          '/login-screen': (ctx) => LoginScreen(),
+          "/product-overview-screen": (ctx) => ProductOverviewScreen(),
         },
       ),
     );
