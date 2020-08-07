@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class Product with ChangeNotifier {
   final String id;
@@ -16,8 +17,19 @@ class Product with ChangeNotifier {
   Product(
       {@required this.id,
       @required this.title,
-      @required this.description,
+      this.description,
       @required this.price,
       @required this.imageUrl,
       this.isFavourite = false});
+
+ factory Product.fromFirestore(DocumentSnapshot doc) {
+    Map data = doc.data;
+    return Product(
+      id: doc.documentID,
+      title: data['name'],
+      price: data['price'],
+      imageUrl: data['image'],
+      description: data['type'] + ' with quantity ' + data['quantity'],
+    ); 
+  }
 }
