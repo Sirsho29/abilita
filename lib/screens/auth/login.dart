@@ -361,8 +361,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                           'uid': user.uid,
                                           'email': user.email,
                                           'name': username,
-                                          'wishes': FieldValue.arrayUnion([]),
-                                          'cart': FieldValue.arrayUnion([]),
                                         });
                                       }).whenComplete(() {
                                         Navigator.of(context).pushNamed(

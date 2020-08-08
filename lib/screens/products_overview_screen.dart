@@ -23,6 +23,8 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     //final productsContainer = Provider.of<Products>(context, listen: false);
     return Consumer<User>(
       builder: (_, user, child) => Scaffold(
@@ -123,121 +125,306 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
             ),
           ],
         ),
-        body: Column(
-          children: [
-            ListTile(
-              leading: (user != null)
-                  ? StreamBuilder<Object>(
-                      stream: Firestore.instance
-                          .collection('users')
-                          .document(user.uid)
-                          .snapshots(),
-                      builder: (context, userSnapshot) {
-                        return Text(
-                          "Welcome ${(user == null) ? "" : userSnapshot.data}",
-                          style: GoogleFonts.comfortaa(
-                              color: Colors.black54, fontSize: 40),
-                        );
-                      })
-                  : Text(
-                      "Welcome",
-                      style: GoogleFonts.comfortaa(
-                          color: Colors.black54, fontSize: 40),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                leading: (user != null)
+                    ? StreamBuilder<DocumentSnapshot>(
+                        stream: Firestore.instance
+                            .collection('users')
+                            .document(user.uid)
+                            .snapshots(),
+                        builder: (context, userSnapshot) {
+                          return Text(
+                            "Welcome ${(user == null) ? "" : userSnapshot.data['name']}",
+                            style: GoogleFonts.comfortaa(
+                                color: Colors.black54, fontSize: 40),
+                          );
+                        })
+                    : Text(
+                        "Welcome",
+                        style: GoogleFonts.comfortaa(
+                            color: Colors.black54, fontSize: 40),
+                      ),
+                title: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 10,
                     ),
-              title: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 10,
-                  ),
-                  FlatButton.icon(
-                      label: Text(
-                        'Categories',
-                        style: GoogleFonts.comfortaa(
-                            color: Colors.black87, fontSize: 20),
-                      ),
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        size: 30,
-                        color: Colors.black54,
-                      ),
-                      onPressed: () {
-                        //Navigator.of(context).pushNamed('/my-cart');
-                      }),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 30,
-                  ),
-                  FlatButton.icon(
-                      label: Text(
-                        'All Products',
-                        style: GoogleFonts.comfortaa(
-                            color: Colors.black87, fontSize: 20),
-                      ),
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        size: 30,
-                        color: Colors.black54,
-                      ),
-                      onPressed: () {
-                        //Navigator.of(context).pushNamed('/my-cart');
-                      }),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 20,
-                  ),
-                  FlatButton.icon(
-                      label: Text(
-                        'Popular',
-                        style: GoogleFonts.comfortaa(
-                            color: Colors.black87, fontSize: 20),
-                      ),
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        size: 30,
-                        color: Colors.black54,
-                      ),
-                      onPressed: () {
-                        //Navigator.of(context).pushNamed('/my-cart');
-                      }),
-                ],
+                    FlatButton.icon(
+                        label: Text(
+                          'Categories',
+                          style: GoogleFonts.comfortaa(
+                              color: Colors.black87, fontSize: 20),
+                        ),
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          size: 30,
+                          color: Colors.black54,
+                        ),
+                        onPressed: () {
+                          //Navigator.of(context).pushNamed('/my-cart');
+                        }),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 30,
+                    ),
+                    FlatButton.icon(
+                        label: Text(
+                          'All Products',
+                          style: GoogleFonts.comfortaa(
+                              color: Colors.black87, fontSize: 20),
+                        ),
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          size: 30,
+                          color: Colors.black54,
+                        ),
+                        onPressed: () {
+                          //Navigator.of(context).pushNamed('/my-cart');
+                        }),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 20,
+                    ),
+                    FlatButton.icon(
+                        label: Text(
+                          'Popular',
+                          style: GoogleFonts.comfortaa(
+                              color: Colors.black87, fontSize: 20),
+                        ),
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          size: 30,
+                          color: Colors.black54,
+                        ),
+                        onPressed: () {
+                          //Navigator.of(context).pushNamed('/my-cart');
+                        }),
+                  ],
+                ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    FlatButton.icon(
+                        label: Text(
+                          ' My Cart',
+                          style: GoogleFonts.comfortaa(color: Colors.black87),
+                        ),
+                        icon: Icon(
+                          Icons.shopping_cart,
+                          color: Colors.black54,
+                        ),
+                        onPressed: () {
+                          //Navigator.of(context).pushNamed('/my-cart');
+                        }),
+                    FlatButton.icon(
+                        label: Text(
+                          ' My Profile',
+                          style: GoogleFonts.comfortaa(color: Colors.black87),
+                        ),
+                        icon: Icon(
+                          FontAwesomeIcons.userAlt,
+                          color: Colors.black54,
+                        ),
+                        onPressed: () {
+                          //Navigator.of(context).pushNamed('/my-cart');
+                        }),
+                  ],
+                ),
               ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  FlatButton.icon(
-                      label: Text(
-                        ' My Cart',
-                        style: GoogleFonts.comfortaa(color: Colors.black87),
+              Divider(),
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: Container(
+                  height: height * 0.75,
+                  width: width * 0.75,
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              height: 150,
+                              width: 300,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: Colors.orange,
+                                  image: DecorationImage(
+                                      image: AssetImage('assets/handi.jpg'),
+                                      fit: BoxFit.fill)),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              height: 150,
+                              width: 300,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: Colors.orange,
+                                  image: DecorationImage(
+                                      image: AssetImage('assets/jewel.jpg'),
+                                      fit: BoxFit.fill)),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              height: 150,
+                              width: 300,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: Colors.orange,
+                                  image: DecorationImage(
+                                      image: AssetImage('assets/mask.jpg'),
+                                      fit: BoxFit.fill)),
+                            ),
+                          ),
+                        ],
                       ),
-                      icon: Icon(
-                        Icons.shopping_cart,
-                        color: Colors.black54,
-                      ),
-                      onPressed: () {
-                        //Navigator.of(context).pushNamed('/my-cart');
-                      }),
-                  FlatButton.icon(
-                      label: Text(
-                        ' My Profile',
-                        style: GoogleFonts.comfortaa(color: Colors.black87),
-                      ),
-                      icon: Icon(
-                        FontAwesomeIcons.userAlt,
-                        color: Colors.black54,
-                      ),
-                      onPressed: () {
-                        //Navigator.of(context).pushNamed('/my-cart');
-                      }),
-                ],
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              height: 150,
+                              width: 300,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: Colors.orange,
+                                  image: DecorationImage(
+                                      image: AssetImage('assets/painting.jpg'),
+                                      fit: BoxFit.fill)),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              height: 150,
+                              width: 300,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: Colors.orange,
+                                  image: DecorationImage(
+                                      image: AssetImage('assets/bou.jpg'),
+                                      fit: BoxFit.fill)),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
               ),
-            ),
-            Divider(),
-            Container(
-              height: MediaQuery.of(context).size.height / 2,
-              child: ProductsGrid(
-                showOnlyFavs: showOnlyFavs,
+              Container(
+                height: height / 4,
+                width: width,
+                color: Color.fromRGBO(57, 57, 57, 1),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'ABOUT',
+                          style: GoogleFonts.comfortaa(color: Colors.white70),
+                        ),
+                        Text(
+                          'Contact Us',
+                          style: GoogleFonts.comfortaa(color: Colors.white),
+                        ),
+                        Text(
+                          'About Us',
+                          style: GoogleFonts.comfortaa(color: Colors.white),
+                        ),
+                        Text(
+                          'About Us',
+                          style: GoogleFonts.comfortaa(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'HELP',
+                          style: GoogleFonts.comfortaa(color: Colors.white70),
+                        ),
+                        Text(
+                          'Payements',
+                          style: GoogleFonts.comfortaa(color: Colors.white),
+                        ),
+                        Text(
+                          'Shipping',
+                          style: GoogleFonts.comfortaa(color: Colors.white),
+                        ),
+                        Text(
+                          'Cancellation',
+                          style: GoogleFonts.comfortaa(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'POLICY',
+                          style: GoogleFonts.comfortaa(color: Colors.white70),
+                        ),
+                        Text(
+                          'Privacy',
+                          style: GoogleFonts.comfortaa(color: Colors.white),
+                        ),
+                        Text(
+                          'Security',
+                          style: GoogleFonts.comfortaa(color: Colors.white),
+                        ),
+                        Text(
+                          'Terms and Conditions',
+                          style: GoogleFonts.comfortaa(color: Colors.white),
+                        ),
+                        Text(
+                          'Return Policy',
+                          style: GoogleFonts.comfortaa(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'SOCIAL',
+                          style: GoogleFonts.comfortaa(color: Colors.white70),
+                        ),
+                        Text(
+                          'Instagram',
+                          style: GoogleFonts.comfortaa(color: Colors.white),
+                        ),
+                        Text(
+                          'Facebook',
+                          style: GoogleFonts.comfortaa(color: Colors.white),
+                        ),
+                        Text(
+                          'Twitter',
+                          style: GoogleFonts.comfortaa(color: Colors.white),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

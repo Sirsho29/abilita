@@ -55,6 +55,12 @@ flutter:
   assets:
     - assets/logoBig.png
     - assets/logoSmall.png
+    - assets/bou.jpg
+    - assets/handi.jpg
+    - assets/jewel.jpg
+    - assets/mask.jpg
+    - assets/painting.jpg
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
