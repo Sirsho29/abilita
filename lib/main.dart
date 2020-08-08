@@ -1,9 +1,6 @@
 import 'package:abilita/screens/auth/auth_service.dart';
 import 'package:abilita/screens/auth/login.dart';
 import 'package:flutter/material.dart';
-import './providers/cart.dart';
-import './providers/orders.dart';
-import './providers/products.dart';
 import './screens/my_cart.dart';
 import './screens/product_detail_screen.dart';
 import 'package:provider/provider.dart';

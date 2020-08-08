@@ -1,6 +1,7 @@
 import 'package:abilita/screens/auth/auth_service.dart';
 import 'package:abilita/screens/product_detail_screen.dart';
 import 'package:abilita/screens/products_overview_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -352,11 +353,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                         .read<FirebaseAuthService>()
                                         .signUpWithEmail(
                                             email, password, username)
-                                        .then((value) {
-                                        if (value != null) {
-                                          Navigator.of(context).pushNamed(
-                                              ProductOverviewScreen.routeName);
-                                        }
+                                        .then((user) {
+                                        Firestore.instance
+                                            .collection('users')
+                                            .document()
+                                            .setData({
+                                          'uid': user.uid,
+                                          'email': user.email,
+                                          'name': username,
+                                          'wishes': FieldValue.arrayUnion([]),
+                                          'cart': FieldValue.arrayUnion([]),
+                                        });
+                                      }).whenComplete(() {
+                                        Navigator.of(context).pushNamed(
+                                            ProductOverviewScreen.routeName);
+
                                         setState(() {
                                           _showSpinner = false;
                                         });
@@ -412,8 +423,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             context
                                 .read<FirebaseAuthService>()
                                 .signInWithGoogle()
-                                .then((val) {
-                              if (val != null) {
+                                .then((user) async {
+                              Firestore.instance
+                                  .collection('users')
+                                  .document()
+                                  .setData({
+                                'uid': user.uid,
+                                'email': user.email,
+                                'name': user.displayName,
+                                'wishes': FieldValue.arrayUnion([]),
+                                'cart': FieldValue.arrayUnion([]),
+                              });
+                              if (user != null) {
                                 Navigator.of(context)
                                     .pushNamed(ProductOverviewScreen.routeName);
                               }
