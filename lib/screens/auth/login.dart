@@ -1,12 +1,15 @@
 import 'package:abilita/screens/auth/auth_service.dart';
-import 'package:abilita/screens/product_detail_screen.dart';
+
 import 'package:abilita/screens/products_overview_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:passwordfield/passwordfield.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,10 +25,81 @@ class _LoginScreenState extends State<LoginScreen> {
   String email;
   String password;
   String username;
+  bool spinnerLoading = true;
 
   bool _signed = true;
 
   bool _showPassword = false;
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = new GoogleSignIn();
+
+  // ignore: missing_return
+  Future<FirebaseUser> _handleSignIn() async {
+    try {
+      setState(() {
+        spinnerLoading = true;
+      });
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final FirebaseUser user =
+          (await _auth.signInWithCredential(credential)).user;
+
+      print("signed in " + user.displayName);
+
+      if (await _googleSignIn.isSignedIn()) {
+        await Firestore.instance
+            .collection('users')
+            .document(user.uid)
+            .setData({
+          'uid': user.uid,
+          'email': user.email,
+          'name': user.displayName,
+        }).whenComplete(() {
+          Navigator.of(context)
+              .pushReplacementNamed("/product-overview-screen");
+        });
+        return user;
+      }
+    } on PlatformException catch (e) {
+      var message = 'An error occurred, please check your credentials!';
+
+      if (e.message != null) {
+        message = e.message;
+      }
+      print(e);
+      Fluttertoast.showToast(msg: message.toString());
+    }
+  }
+
+  // ignore: unused_element
+  void _submitAuthForm(String userEmail, String userPassword) async {
+    try {
+      final user = await _auth.signInWithEmailAndPassword(
+          email: userEmail, password: userPassword);
+      if (user != null) {
+        //Navigator.of(context).pushNamed(HomeScreen.routeName);
+      }
+      setState(() {
+        spinnerLoading = false;
+      });
+    } on PlatformException catch (e) {
+      var message = 'An error occurred, please check your credentials!';
+
+      if (e.message != null) {
+        message = e.message;
+      }
+      print(e);
+      Fluttertoast.showToast(msg: message.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +145,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: 3,
                         color: Color.fromRGBO(160, 160, 160, 1),
                       )),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushReplacementNamed("/product-overview-screen");
+                  },
                   child: Text(
                     'Explore',
                     style: GoogleFonts.comfortaa(
@@ -417,32 +494,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           setState(() {
                             _showSpinner = true;
                           });
-                          try {
-                            context
-                                .read<FirebaseAuthService>()
-                                .signInWithGoogle()
-                                .then((user) async {
-                              Firestore.instance
-                                  .collection('users')
-                                  .document()
-                                  .setData({
-                                'uid': user.uid,
-                                'email': user.email,
-                                'name': user.displayName,
-                                'wishes': FieldValue.arrayUnion([]),
-                                'cart': FieldValue.arrayUnion([]),
-                              });
-                              if (user != null) {
-                                Navigator.of(context)
-                                    .pushNamed(ProductOverviewScreen.routeName);
-                              }
-                              setState(() {
-                                _showSpinner = false;
-                              });
-                            });
-                          } catch (e) {
-                            print(e);
-                          }
+                          await _handleSignIn();
                         },
                         minWidth: 200.0,
                         height: 42.0,

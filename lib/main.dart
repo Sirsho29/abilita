@@ -1,3 +1,4 @@
+import 'package:abilita/screens/all_prod.dart';
 import 'package:abilita/screens/auth/auth_service.dart';
 import 'package:abilita/screens/auth/login.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         MyCart.routeName: (ctx) => MyCart(),
         '/login-screen': (ctx) => LoginScreen(),
         "/product-overview-screen": (ctx) => ProductOverviewScreen(),
+        '/all-products': (ctx) => AllProducts(),
       },
     );
   }

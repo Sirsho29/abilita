@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../widgets/products_grid.dart';
 import '../screens/auth/user_model.dart';
 
 enum FilterOptions {
@@ -154,20 +153,101 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width / 10,
                     ),
-                    FlatButton.icon(
-                        label: Text(
-                          'Categories',
-                          style: GoogleFonts.comfortaa(
-                              color: Colors.black87, fontSize: 20),
+                    // FlatButton.icon(
+                    //     label: Text(
+                    //       'Categories',
+                    //       style: GoogleFonts.comfortaa(
+                    //           color: Colors.black87, fontSize: 20),
+                    //     ),
+                    //     icon: Icon(
+                    //       Icons.arrow_drop_down,
+                    //       size: 30,
+                    //       color: Colors.black54,
+                    //     ),
+                    //     onPressed: () {}),
+                    PopupMenuButton(
+                        child: Center(
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.arrow_drop_down,
+                                size: 30,
+                                color: Colors.black54,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                'Categories',
+                                style: GoogleFonts.comfortaa(
+                                    color: Colors.black87, fontSize: 20),
+                              ),
+                            ],
+                          ),
                         ),
-                        icon: Icon(
-                          Icons.arrow_drop_down,
-                          size: 30,
-                          color: Colors.black54,
-                        ),
-                        onPressed: () {
-                          //Navigator.of(context).pushNamed('/my-cart');
-                        }),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side:
+                                BorderSide(color: Colors.redAccent, width: 1)),
+                        elevation: 5,
+                        onSelected: (FilterOptions value) {
+                          if (value == FilterOptions.Favourites) {
+                            //productsContainer.showFavsOnly();
+                            setState(() {
+                              showOnlyFavs = true;
+                            });
+                          } else {
+                            //productsContainer.showAll();
+                            setState(() {
+                              showOnlyFavs = false;
+                            });
+                          }
+                        },
+                        itemBuilder: (_) => [
+                              PopupMenuItem(
+                                child: Text(
+                                  'Handicrafts',
+                                  style: GoogleFonts.comfortaa(
+                                      color: Colors.black87, fontSize: 20),
+                                ),
+                                value: FilterOptions.Favourites,
+                              ),
+                              PopupMenuItem(
+                                  child: Text(
+                                    'Masks',
+                                    style: GoogleFonts.comfortaa(
+                                        color: Colors.black87, fontSize: 20),
+                                  ),
+                                  value: FilterOptions.All),
+                              PopupMenuItem(
+                                  child: Text(
+                                    'Paintings',
+                                    style: GoogleFonts.comfortaa(
+                                        color: Colors.black87, fontSize: 20),
+                                  ),
+                                  value: FilterOptions.All),
+                              PopupMenuItem(
+                                  child: Text(
+                                    'Jwellery',
+                                    style: GoogleFonts.comfortaa(
+                                        color: Colors.black87, fontSize: 20),
+                                  ),
+                                  value: FilterOptions.All),
+                              PopupMenuItem(
+                                  child: Text(
+                                    'Boutique',
+                                    style: GoogleFonts.comfortaa(
+                                        color: Colors.black87, fontSize: 20),
+                                  ),
+                                  value: FilterOptions.All),
+                              PopupMenuItem(
+                                  child: Text(
+                                    'Show-pieces',
+                                    style: GoogleFonts.comfortaa(
+                                        color: Colors.black87, fontSize: 20),
+                                  ),
+                                  value: FilterOptions.All),
+                            ]),
                     SizedBox(
                       width: MediaQuery.of(context).size.width / 30,
                     ),
@@ -183,7 +263,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                           color: Colors.black54,
                         ),
                         onPressed: () {
-                          //Navigator.of(context).pushNamed('/my-cart');
+                          Navigator.of(context).pushNamed('/all-products');
                         }),
                     SizedBox(
                       width: MediaQuery.of(context).size.width / 20,
